@@ -9,17 +9,17 @@ using namespace arma;
 
 double offDiagonal(mat, int*, int*, int);
 
-void JacobiRotation(int n, int *iterations) {
+void JacobiRotation(int n, int* iterations, double rho_max) {
 	
 	vec d(n);
 	vec rho(n);
 	vec V(n);
 	
 	double rho_min = 0.0;
-	double rho_max = 4.5;
+//	double rho_max = 4.5;
 
 	// Step size
-	double h = (rho_max - rho_min)/(n);
+	double h = (rho_max - rho_min)/(n+1);
 
 	double e = -1./(h*h);
 
@@ -116,6 +116,8 @@ void JacobiRotation(int n, int *iterations) {
 	}
 	
 	cout << "Iterations: " << *iterations << endl;
+	cout << "rho_max: " << rho_max << endl;
+	cout << "n: " << n << endl;
 	vec sortEigenvals = sort(A.diag());	// Sort by increasing eigenvalues
 
 	for (int i=0; i<3; i++) {
@@ -123,10 +125,11 @@ void JacobiRotation(int n, int *iterations) {
 		cout << "Eigenvalue no. " << i+1 << ":	" << sortEigenvals(i) << endl; 
 
 	}
-
-	
-
-		
+	/* 
+	double firstEig = sortEigenvals(0);
+	double secondEig = sortEigenvals(1);
+	double thirdEig = sortEigenvals(2);
+	*/
 
 }
 
