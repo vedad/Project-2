@@ -89,6 +89,68 @@ Plotted the iterations as function of n. Need to insert this into MATLAB for it
 to find us an approximated polynomial. The graph looks like a second order
 polynomial that is positive.
 
+Did a polyfit in MATLAB, and plotted the polynomial as function of n. Here
+are the polynomial coefficients:
+
+Linear model Poly2:
+f(x) = p1*x^2 + p2*x + p3
+where x is normalized by mean 143 and std 89.44
+Coefficients (with 95% confidence bounds):
+p1 =   1.356e+04  (1.35e+04, 1.362e+04)
+p2 =   4.298e+04  (4.293e+04, 4.304e+04)
+p3 =   3.409e+04  (3.402e+04, 3.417e+04)
+
+Goodness of fit:
+SSE: 9.485e+04
+R-square: 1
+Adjusted R-square: 1
+RMSE: 88.91
+
+Also used the Jacobi rotation algorithm for different rho_max. I plotted the
+relative difference between numerical and analytical values for the eigenvalues.
+From the plot we can see that the smallest errors are for rho_max = 4-10.
+By doing another plot for rho_max with these values, we more clearly see
+the difference in precision. There is a minimum for rho_max = 4.5.
+
+Have now computed the time it takes for the Jacobi rotation algorithm to find
+the eigenvalues of a tridiagonal matrix, compared to the Armadillo function that
+uses a standard eigenvalue solver algorithm. The difference in time is major.
+For n = 200, the Jacobi algorithm used just under 16 seconds, while the 
+Armadillo function used about 0.2 seconds. By using a divide and conquer method
+with the same Armadillo function, the time recudes to 0.1 seconds.
+
+Let us compare the time spent for the three methods for some values of n:
+
+n=50:
+JRA: 0.07
+Arma: 0.00
+ArmaDC: 0.00
+
+n=100:
+JRA: 0.99
+Arma: 0.00
+ArmaDC: 0.00
+
+n=150:
+JRA: 4.94
+Arma: 0.01
+ArmaDC: 0.01
+
+n=200:
+JRA: 15.61
+Arma: 0.02
+ArmaDC: 0.01
+
+n=250:
+JRA: 37.77
+Arma: 0.03
+ArmaDC: 0.02
+
+n=300:
+JRA: 77.68
+Arma: 0.05
+ArmaDC: 0.02
+
 
 
 
