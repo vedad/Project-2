@@ -18,8 +18,8 @@ double duration(clock_t, clock_t);
 
 int main() {
 
-	nDependency(5.0);
-//	rhoMaxDependency(175);
+//	nDependency(5.0);
+	rhoMaxDependency(210);
 //	iterationDependency();
 //	exA(150,4.5);
 //	exB(300,4.5);
@@ -106,7 +106,7 @@ void nDependency(double rho_max) {
 	double thirdEig = 11.0000;
 
 	fstream outFile;
-	outFile.open("data/nData3.txt", ios::out);
+	outFile.open("data/nData2.txt", ios::out);
 
 	for (int n=150; n <= 300; n+=15) {
 
@@ -117,7 +117,7 @@ void nDependency(double rho_max) {
 		double relDiffSecondEig = abs(secondEig - sortEigenvals(1));
 		double relDiffThirdEig = abs(thirdEig - sortEigenvals(2));
 
-		outFile << n << " " << sortEigenvals(0) << " " << sortEigenvals(1) << " " << sortEigenvals(2) << endl;
+		outFile << n << " " << relDiffFirstEig << " " << relDiffSecondEig << " " << relDiffThirdEig << endl;
 	}
 
 	outFile.close();
