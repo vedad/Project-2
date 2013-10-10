@@ -13,14 +13,16 @@ void exA(int, double);
 void exB(int, double);
 void iterationDependency();
 void rhoMaxDependency(int);
+void nDependency(double);
 double duration(clock_t, clock_t);
 
 int main() {
 
+	nDependency(5.0);
 //	rhoMaxDependency(175);
 //	iterationDependency();
 //	exA(150,4.5);
-	exB(300,4.5);
+//	exB(300,4.5);
 
 	return 0;
 }
@@ -89,6 +91,33 @@ void rhoMaxDependency(int n) {
 
 		outFile << rho_max << " " << relDiffFirstEig << " " << relDiffSecondEig << " " << relDiffThirdEig << endl;
 
+	}
+
+	outFile.close();
+
+}
+
+void nDependency(double rho_max) {
+
+	int iterations;
+	
+	double firstEig = 3.0000;
+	double secondEig = 7.0000;
+	double thirdEig = 11.0000;
+
+	fstream outFile;
+	outFile.open("data/nData3.txt", ios::out);
+
+	for (int n=150; n <= 300; n+=15) {
+
+		vec sortEigenvals(n);
+		sortEigenvals = JacobiRotation(n,&iterations,rho_max);
+
+		double relDiffFirstEig = abs(firstEig - sortEigenvals(0));
+		double relDiffSecondEig = abs(secondEig - sortEigenvals(1));
+		double relDiffThirdEig = abs(thirdEig - sortEigenvals(2));
+
+		outFile << n << " " << sortEigenvals(0) << " " << sortEigenvals(1) << " " << sortEigenvals(2) << endl;
 	}
 
 	outFile.close();
