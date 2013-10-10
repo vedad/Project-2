@@ -9,7 +9,7 @@ using namespace arma;
 
 double offDiagonal(mat, int*, int*, int);
 
-void JacobiRotation(int n, int* iterations, double rho_max) {
+vec JacobiRotation(int n, int* iterations, double rho_max) {
 	
 	vec d(n);
 	vec rho(n);
@@ -119,18 +119,26 @@ void JacobiRotation(int n, int* iterations, double rho_max) {
 	cout << "rho_max: " << rho_max << endl;
 	cout << "n: " << n << endl;
 	vec sortEigenvals = sort(A.diag());	// Sort by increasing eigenvalues
+	
+//	fstream outFile;
+//	outFile.open("data/rhoMaxData.txt", ios::out);
 
 	for (int i=0; i<3; i++) {
 
 		cout << "Eigenvalue no. " << i+1 << ":	" << sortEigenvals(i) << endl; 
-
+		
 	}
+	
+	
+//	outFile.close();
+
 	/* 
 	double firstEig = sortEigenvals(0);
 	double secondEig = sortEigenvals(1);
 	double thirdEig = sortEigenvals(2);
 	*/
-
+	
+	return sortEigenvals;
 }
 
 double offDiagonal(mat A, int *k, int *l, int n) {

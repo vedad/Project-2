@@ -7,15 +7,16 @@
 //#include "getUnixTime.h"
 
 using namespace std;
+using namespace arma;
 
 void exA(int,double);
 void iterationDependency();
-void rhoMaxDependency();
+void rhoMaxDependency(int);
 double duration(clock_t, clock_t);
 
 int main() {
 
-	rhoMaxDependency();
+	rhoMaxDependency(150);
 //	iterationDependency();
 //	exA(165,4.5);
 
@@ -26,7 +27,6 @@ int main() {
 void exA(int n, double rho_max) {
 	
 	int iterations;
-//	double rho_max;
 
 	clock_t start, finish;
 	start = clock();
@@ -39,7 +39,6 @@ void exA(int n, double rho_max) {
 void iterationDependency() {
 
 	int iterations;
-//	double rho_max;
 	
 	fstream outFile;
 	outFile.open("data/iterationsData.dat", ios::out);
@@ -55,17 +54,28 @@ void iterationDependency() {
 
 }
 
-void rhoMaxDependency() {
+void rhoMaxDependency(int n) {
 
 	int iterations;
+	vec sortEigenvals(n);
+	double firstEig = 3.00;
+	double secondEig = 7.00;
+	double thirdEig = 11.00;
 
 	fstream outFile;
-	outFile.open("data/rhoMaxData.dat", ios::out);
+	outFile.open("data/rhoMaxData.txt", ios::out);
 
 	for (double rho_max=1; rho_max <= 10; rho_max+=0.5) {
 		
-		JacobiRotation(100,&iterations,rho_max);
-		outFile << rho_max << endl;
+		sortEigenvals = JacobiRotation(n,&iterations,rho_max);
+	
+		// Calculate relative difference from exact solution
+		double relDiffFirstEig = abs(firstEig - sortEigenvals(0));
+		double relDiffSecondEig = abs(secondEig - sortEigenvals(1));
+		double relDiffThirdEig = abs(thirdEig - sortEigenvals(2));
+
+		outFile << rho_max << " " << relDiffFirstEig << " " << relDiffSecondEig << " " << relDiffThirdEig << endl;
+
 	}
 
 	outFile.close();
