@@ -3,22 +3,24 @@
 #include <fstream>
 #include <armadillo>
 #include "JacobiRotation.h"
+#include "EigenvalueSOlver.hpp"
 #include <ctime>
-//#include "getUnixTime.h"
 
 using namespace std;
 using namespace arma;
 
-void exA(int,double);
+void exA(int, double);
+void exB(int, double);
 void iterationDependency();
 void rhoMaxDependency(int);
 double duration(clock_t, clock_t);
 
 int main() {
 
-	rhoMaxDependency(150);
+//	rhoMaxDependency(175);
 //	iterationDependency();
-//	exA(165,4.5);
+//	exA(150,4.5);
+	exB(300,4.5);
 
 	return 0;
 }
@@ -32,7 +34,18 @@ void exA(int n, double rho_max) {
 	start = clock();
 	JacobiRotation(n, &iterations, rho_max);
 	finish = clock();
-	printf ("Time elapsed: %.2f s\n", duration(start,finish));
+	printf ("Time elapsed for Jacobi algorithm: %.2f s\n", duration(start,finish));
+
+}
+
+void exB(int n, double rho_max) {
+	
+	clock_t start, finish;
+	start = clock();
+	EigenvalueSolver(n, rho_max);
+	finish = clock();
+	printf ("Time elapsed for Armadillo function: %.2f s\n", duration(start,finish));
+
 
 }
 
@@ -58,14 +71,14 @@ void rhoMaxDependency(int n) {
 
 	int iterations;
 	vec sortEigenvals(n);
-	double firstEig = 3.00;
-	double secondEig = 7.00;
-	double thirdEig = 11.00;
+	double firstEig = 3.0000;
+	double secondEig = 7.0000;
+	double thirdEig = 11.0000;
 
 	fstream outFile;
-	outFile.open("data/rhoMaxData.txt", ios::out);
+	outFile.open("data/rhoMaxData2.txt", ios::out);
 
-	for (double rho_max=1; rho_max <= 10; rho_max+=0.5) {
+	for (double rho_max=4; rho_max <= 10; rho_max+=0.5) {
 		
 		sortEigenvals = JacobiRotation(n,&iterations,rho_max);
 	
