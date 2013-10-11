@@ -10,7 +10,7 @@ using namespace std;
 using namespace arma;
 
 void exA(int, double);
-void exB(int, double);
+void exB(double);
 void iterationDependency();
 void rhoMaxDependency(int);
 void nDependency(double);
@@ -19,10 +19,10 @@ double duration(clock_t, clock_t);
 int main() {
 
 //	nDependency(5.0);
-	rhoMaxDependency(210);
+//	rhoMaxDependency(210);
 //	iterationDependency();
 //	exA(150,4.5);
-//	exB(300,4.5);
+	exB(5.0);
 
 	return 0;
 }
@@ -40,11 +40,32 @@ void exA(int n, double rho_max) {
 
 }
 
-void exB(int n, double rho_max) {
+void exB(double rho_max) {
+
+	double firstEig = 3.0000;
+	double secondEig = 7.0000;
+	double thirdEig = 11.0000;
 	
 	clock_t start, finish;
 	start = clock();
-	EigenvalueSolver(n, rho_max);
+
+	fstream outFile;
+	outFile.open("data/armaData.txt", ios::out);
+
+	for (int n=3; n <= 300; n+=20) {
+
+		vec sortEigenvals(n);
+		sortEigenvals =	EigenvalueSolver(n, rho_max);
+
+		double relDiffFirstEig = abs(firstEig - sortEigenvals(0));
+		double relDiffSecondEig = abs(secondEig - sortEigenvals(1));
+		double relDiffThirdEig = abs(thirdEig - sortEigenvals(2));
+
+		outFile << n << " " << relDiffFirstEig << " " << relDiffSecondEig << " " << relDiffThirdEig << endl;
+
+	}
+
+	outFile.close();
 	finish = clock();
 	printf ("Time elapsed for Armadillo function: %.2f s\n", duration(start,finish));
 

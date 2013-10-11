@@ -24,7 +24,7 @@
 using namespace std;
 using namespace arma;
 
-void EigenvalueSolver(int n, double rho_max) {
+vec EigenvalueSolver(int n, double rho_max) {
 
 	vec diagonal(n);
 	vec offDiagonal(n-1);
@@ -70,5 +70,7 @@ void EigenvalueSolver(int n, double rho_max) {
 		cout << "Eigenvalue no. " << i+1 << ":	" << sortEigenvals(i) << endl; 
 		
 	}
+
+	return sortEigenvals;
 
 }
