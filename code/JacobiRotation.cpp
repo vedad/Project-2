@@ -9,7 +9,7 @@ using namespace arma;
 
 double offDiagonal(mat, int*, int*, int);
 
-vec JacobiRotation(int n, int* iterations, double rho_max) {
+vec JacobiRotation(int n, int* iterations, double rho_max, double omegaR) {
 	
 	vec d(n);
 	vec rho(n);
@@ -17,6 +17,7 @@ vec JacobiRotation(int n, int* iterations, double rho_max) {
 	
 	double rho_min = 0.0;
 //	double rho_max = 4.5;
+//	double omegaR = 0.01;
 
 	// Step size
 	double h = (rho_max - rho_min)/(n+1);
@@ -26,7 +27,7 @@ vec JacobiRotation(int n, int* iterations, double rho_max) {
 	for (int i=0; i < n; i++) {
 
 		rho(i) = rho_min + (i+1) * h;
-		V(i) = rho(i) * rho(i);
+		V(i) = omegaR * omegaR * rho(i) * rho(i) + 1./rho(i);
 		d(i) = 2./(h * h) + V(i);
 
 	}
@@ -109,34 +110,21 @@ vec JacobiRotation(int n, int* iterations, double rho_max) {
 		}
 
 		(*iterations)++;
-//		cout << "New matrix:" << endl;
-//		cout << A << endl;
 
 
 	}
 	
 	cout << "Iterations: " << *iterations << endl;
 	cout << "rho_max: " << rho_max << endl;
+	cout << "omegaR: " << omegaR << endl;
 	cout << "n: " << n << endl;
 	vec sortEigenvals = sort(A.diag());	// Sort by increasing eigenvalues
 	
-//	fstream outFile;
-//	outFile.open("data/rhoMaxData.txt", ios::out);
-
 	for (int i=0; i<3; i++) {
 
 		cout << "Eigenvalue no. " << i+1 << ":	" << sortEigenvals(i) << endl; 
 		
 	}
-	
-	
-//	outFile.close();
-
-	/* 
-	double firstEig = sortEigenvals(0);
-	double secondEig = sortEigenvals(1);
-	double thirdEig = sortEigenvals(2);
-	*/
 	
 	return sortEigenvals;
 }

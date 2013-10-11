@@ -9,11 +9,12 @@
 using namespace std;
 using namespace arma;
 
-void exA(int, double);
+void exA(int, double, double);
 void exB(double);
-void iterationDependency();
-void rhoMaxDependency(int);
-void nDependency(double);
+void exC(int, double, double);
+void iterationDependency(double);
+void rhoMaxDependency(int,double);
+void nDependency(double, double);
 double duration(clock_t, clock_t);
 
 int main() {
@@ -22,19 +23,20 @@ int main() {
 //	rhoMaxDependency(210);
 //	iterationDependency();
 //	exA(150,4.5);
-	exB(5.0);
+//	exB(5.0);
+	exC(210,4.5,5.0);
 
 	return 0;
 }
 
 
-void exA(int n, double rho_max) {
+void exA(int n, double rho_max, double omegaR) {
 	
 	int iterations;
 
 	clock_t start, finish;
 	start = clock();
-	JacobiRotation(n, &iterations, rho_max);
+	JacobiRotation(n, &iterations, rho_max, omegaR);
 	finish = clock();
 	printf ("Time elapsed for Jacobi algorithm: %.2f s\n", duration(start,finish));
 
@@ -52,7 +54,7 @@ void exB(double rho_max) {
 	fstream outFile;
 	outFile.open("data/armaData.txt", ios::out);
 
-	for (int n=3; n <= 300; n+=20) {
+	for (int n=150; n <= 300; n+=10) {
 
 		vec sortEigenvals(n);
 		sortEigenvals =	EigenvalueSolver(n, rho_max);
@@ -72,7 +74,16 @@ void exB(double rho_max) {
 
 }
 
-void iterationDependency() {
+void exC(int n, double rho_max, double omegaR) {
+
+	int iterations;
+
+	JacobiRotation(n,&iterations,rho_max,omegaR);
+
+}	
+
+
+void iterationDependency(double omegaR) {
 
 	int iterations;
 	
@@ -81,7 +92,7 @@ void iterationDependency() {
 
 	for (int n=3; n <= 300; n+=20) {
 
-		JacobiRotation(n,&iterations,4.5);
+		JacobiRotation(n,&iterations,4.5,omegaR);
 		outFile << n << " " << iterations << endl;
 
 	}
@@ -90,7 +101,7 @@ void iterationDependency() {
 
 }
 
-void rhoMaxDependency(int n) {
+void rhoMaxDependency(int n, double omegaR) {
 
 	int iterations;
 	vec sortEigenvals(n);
@@ -103,7 +114,7 @@ void rhoMaxDependency(int n) {
 
 	for (double rho_max=4; rho_max <= 10; rho_max+=0.5) {
 		
-		sortEigenvals = JacobiRotation(n,&iterations,rho_max);
+		sortEigenvals = JacobiRotation(n,&iterations,rho_max,omegaR);
 	
 		// Calculate relative difference from exact solution
 		double relDiffFirstEig = abs(firstEig - sortEigenvals(0));
@@ -118,7 +129,7 @@ void rhoMaxDependency(int n) {
 
 }
 
-void nDependency(double rho_max) {
+void nDependency(double rho_max,double omegaR) {
 
 	int iterations;
 	
@@ -132,7 +143,7 @@ void nDependency(double rho_max) {
 	for (int n=150; n <= 300; n+=15) {
 
 		vec sortEigenvals(n);
-		sortEigenvals = JacobiRotation(n,&iterations,rho_max);
+		sortEigenvals = JacobiRotation(n,&iterations,rho_max,omegaR);
 
 		double relDiffFirstEig = abs(firstEig - sortEigenvals(0));
 		double relDiffSecondEig = abs(secondEig - sortEigenvals(1));
